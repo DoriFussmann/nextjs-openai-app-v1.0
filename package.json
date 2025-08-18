@@ -9,13 +9,18 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@langchain/openai": "^0.6.7",
+    "bottleneck": "^2.19.5",
+    "langchain": "^0.3.30",
     "next": "^14.2.31",
     "openai": "^5.12.2",
+    "pdf-parse": "^1.1.1",
     "react": "^18",
     "react-dom": "^18"
   },
   "devDependencies": {
     "@types/node": "^20",
+    "@types/pdf-parse": "^1.1.5",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",

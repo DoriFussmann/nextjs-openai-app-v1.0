@@ -69,56 +69,50 @@ export default function Home() {
   ];
 
   return (
-    <main className="page-wrap bg-white text-black">
+    <div className="bg-white text-black">
       {/* Page Header */}
       <header className="border-b border-gray-200 px-4 py-4">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-                     <div className="text-xl">My project</div>
-                     <nav className="hidden md:flex space-x-4">
-             <a href="/openai-call" className="px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors duration-200 text-sm">OpenAI</a>
-           </nav>
+        <div className="page-wrap flex justify-between items-center">
+          <div className="text-xl">My project</div>
+          <nav className="hidden md:flex space-x-4">
+            <a href="/openai-call" className="px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors duration-200 text-sm">OpenAI</a>
+          </nav>
         </div>
       </header>
 
-      {/* Main Header Section */}
-      <header className="py-8 md:py-10 lg:py-12">
-        <div className="w-full">
-                     <h1
-             className="
-               font-normal tracking-[-0.01em]
-               leading-[1.34]
-               text-[clamp(2rem,6vw,4.5rem)]
-               text-black
-               mb-4
-             "
-           >
-            What would you like<br />
-            the power to{' '}
-            <span className={`bg-gradient-to-r ${words[currentWord]?.color || 'from-purple-600 to-blue-600'} bg-clip-text text-transparent`}>
-              {currentText}
-            </span>
-            <span className="animate-pulse">|</span>
-          </h1>
-        </div>
-      </header>
-
-      {/* Main Grid Section */}
-      <section className="mt-8 md:mt-10 lg:mt-12">
-        <div className="w-full">
-                     <h2 className="text-[1.5rem] md:text-[1.75rem] font-normal mb-6">Financial tools</h2>
-          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                         {items.map((item, index) => (
-               <PriceTrackerCard
-                 key={index}
-                 title={item.title}
-                 description={item.description}
-                 iconColor={item.iconColor}
-                 className="transform hover:-translate-y-1 hover:shadow-lg transition-all duration-200 cursor-pointer"
-               />
-             ))}
+      <main className="page-wrap">
+        {/* Main Header Section */}
+        <header className="py-8 md:py-10 lg:py-12">
+          <div className="w-full">
+            <h1 className="text-5xl md:text-7xl text-gray-900 mb-6 leading-tight">
+              What would you like
+              <br />
+              the power to{' '}
+              <span className="text-blue-600">
+                {currentText}
+                <span className="animate-pulse">|</span>
+              </span>
+            </h1>
           </div>
-        </div>
-      </section>
-    </main>
+        </header>
+
+        {/* Main Grid Section */}
+        <section className="mt-8 md:mt-10 lg:mt-12">
+          <div className="w-full">
+            <h2 className="text-[1.5rem] md:text-[1.75rem] font-normal mb-6">Financial tools</h2>
+            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {items.map((item, index) => (
+                <PriceTrackerCard
+                  key={index}
+                  title={item.title}
+                  description={item.description}
+                  iconColor={item.iconColor}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
   )
 }

@@ -39,55 +39,53 @@ export default function PriceTrackerCard({
 
   return (
     <div className={`
-      w-full aspect-square
       bg-white
-      border border-[#EAEAEA]
-      rounded-lg
-      shadow-[0_4px_18px_rgba(0,0,0,0.06)]
-      p-5
+      border border-gray-200
+      rounded-xl
+      p-8
+      shadow-lg
+      hover:scale-105
+      transition-all duration-300
+      cursor-pointer
+      flex flex-col h-full
       ${className}
     `}>
-                    <div className="flex flex-col h-full">
-         <div className="space-y-6">
-                       {/* Icon tile */}
-            <div className={`w-14 h-14 ${iconColor} rounded-xl flex items-center justify-center`}>
-             {icon ? (
-               <div className="w-6 h-6 text-white">
-                 {icon}
-               </div>
-             ) : (
-               <div className="w-6 h-6 bg-white rounded-sm"></div>
-             )}
-           </div>
+      {/* Icon Section */}
+      <div className={`${iconColor} rounded-xl w-16 h-16 flex items-center justify-center mb-6`}>
+        {icon ? (
+          <div className="w-6 h-6 text-white">
+            {icon}
+          </div>
+        ) : (
+          <svg className="w-6 h-6" fill="none" stroke="white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        )}
+      </div>
 
-           {/* Content */}
-           <div className="space-y-3">
-                                    {/* Title */}
-            <h3 className="text-[1.125rem] leading-[1.25] font-normal text-[#111827]">
-              {title}
-            </h3>
+      {/* Title */}
+      <h3 className="text-lg text-gray-900 mb-4">
+        {title}
+      </h3>
 
-                       {/* Description */}
-            <p className="text-[0.906rem] leading-[1.9] text-[#6B7280]">
-              {description}
-            </p>
-           </div>
-         </div>
+      {/* Description */}
+      <p className="text-gray-600 text-sm leading-relaxed flex-grow">
+        {description}
+      </p>
 
-         {/* Status pill - pushed to bottom */}
-         <div className="mt-auto pt-6">
-           <div className={`
-             h-7 px-3 rounded-full
-             ${currentStatus.bg}
-             ${currentStatus.text}
-             font-normal text-[0.781rem]
-             flex items-center justify-center
-             w-fit
-           `}>
-             {currentStatus.label}
-           </div>
-         </div>
-       </div>
+      {/* Status pill - pushed to bottom with spacing */}
+      <div className="mt-6">
+        <div className={`
+          h-7 px-3 rounded-full
+          ${currentStatus.bg}
+          ${currentStatus.text}
+          font-normal text-[0.781rem]
+          flex items-center justify-center
+          w-fit
+        `}>
+          {currentStatus.label}
+        </div>
+      </div>
     </div>
   );
 }
