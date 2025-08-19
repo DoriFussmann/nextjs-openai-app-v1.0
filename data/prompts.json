@@ -1,0 +1,150 @@
+{
+  "cursorPrompts": [
+    {
+      "id": "prompt-1",
+      "title": "Page 25/75",
+      "content": "Create a new page at app/portfolio/page.tsx that copies the exact layout and structure of the Share Price page, but remove all functionality from buttons and dropdowns. Keep only the visual design and layout.\n\nSpecific changes:\n- Page title: \"Portfolio Analysis\"\n- Left section title: \"Portfolio Inputs\"\n- Right section title: \"Analysis Results\" \n- Navigation buttons: \"Reset\" and \"Home\"\n- Remove all onClick handlers, API calls, and state management\n- Keep placeholder chart area and event boxes sections\n- Replace dropdown options with: [\"Tech Stocks\", \"Blue Chips\", \"Growth\"] for first dropdown, [\"6 Months\", \"1 Year\", \"2 Years\"] for second dropdown\n\nAdd navigation from the home page to this page, in an additional grid box."
+    },
+    {
+      "id": "prompt-2",
+      "title": "Prompt 2",
+      "content": "Enter your prompt content here..."
+    },
+    {
+      "id": "prompt-3",
+      "title": "Prompt 3",
+      "content": "Enter your prompt content here..."
+    },
+    {
+      "id": "prompt-4",
+      "title": "Prompt 4 buddy",
+      "content": "yo"
+    },
+    {
+      "id": "prompt-5",
+      "title": "Prompt 5",
+      "content": "Enter your prompt content here..."
+    },
+    {
+      "id": "prompt-6",
+      "title": "Prompt 6",
+      "content": "Enter your prompt content here..."
+    },
+    {
+      "id": "prompt-7",
+      "title": "Prompt 7",
+      "content": "Enter your prompt content here..."
+    }
+  ],
+  "designPrompts": [
+    {
+      "id": "design-1",
+      "title": "Button",
+      "content": "**Task:** Add a new button using the shared Button design system.\n\n**Design rules**\n- Font: Inter, normal weight (no bold)\n- Corners: rounded-2xl\n- Motion: transition-all duration-200\n- Focus state: focus:outline-none focus:ring-2 focus:ring-blue-600/40\n- Disabled: opacity-50 and no pointer events\n- Icons: optional, 16–20px, spaced with gap-2\n\n**Variants**\n- Primary: bg-blue-600 text-white hover:bg-blue-700 active:scale-[0.98]\n- Secondary: bg-white text-gray-900 border border-gray-200 hover:bg-gray-50\n- Ghost: bg-transparent text-gray-700 hover:bg-gray-100\n- Danger: bg-red-600 text-white hover:bg-red-700\n\n**Sizes**\n- sm: h-9 px-3 text-sm\n- md (default): h-10 px-4 text-base\n- lg: h-12 px-6 text-lg\n\n**Code (Button component)**\n```tsx\nimport React from \"react\";\ntype ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {\n  variant?: \"primary\" | \"secondary\" | \"ghost\" | \"danger\";\n  size?: \"sm\" | \"md\" | \"lg\";\n  full?: boolean;\n  leftIcon?: React.ReactNode;\n  rightIcon?: React.ReactNode;\n};\n\nexport function Button({\n  variant = \"primary\",\n  size = \"md\",\n  full = false,\n  leftIcon,\n  rightIcon,\n  className = \"\",\n  children,\n  ...props\n}: ButtonProps) {\n  const base =\n    \"inline-flex items-center justify-center rounded-2xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-600/40 disabled:opacity-50 disabled:pointer-events-none gap-2\";\n  const sizes = {\n    sm: \"h-9 px-3 text-sm\",\n    md: \"h-10 px-4 text-base\",\n    lg: \"h-12 px-6 text-lg\",\n  }[size];\n  const variants = {\n    primary: \"bg-blue-600 text-white hover:bg-blue-700 active:scale-[0.98]\",\n    secondary:\n      \"bg-white text-gray-900 border border-gray-200 hover:bg-gray-50\",\n    ghost: \"bg-transparent text-gray-700 hover:bg-gray-100\",\n    danger: \"bg-red-600 text-white hover:bg-red-700\",\n  }[variant];\n\n  return (\n    <button\n      className={`${base} ${sizes} ${variants} ${full ? \"w-full\" : \"\"} ${className}`}\n      {...props}\n    >\n      {leftIcon}\n      {children}\n      {rightIcon}\n    </button>\n  );\n}\n"
+    },
+    {
+      "id": "design-2",
+      "title": "Window",
+      "content": "## 🪟 Cursor Block: **Add a New Window**\n\n```md\n**Task:** Add a new window component. Use WindowCard for on-page panels and Modal for overlays. Both share the same design.\n\n**Shared design rules**\n- Background: bg-white\n- Border: border border-gray-200\n- Corners: rounded-2xl\n- Shadow: shadow-lg\n- Padding: p-6 md:p-8\n- Typography: Inter, no bold\n- Layout: Header → Body → (optional) Actions\n- Actions: mt-6 flex items-center gap-3 justify-end\n\n---\n\n### A) WindowCard (on-page panel)\n```tsx\ntype WindowCardProps = {\n  title?: string;\n  subtitle?: string;\n  actions?: React.ReactNode;\n  className?: string;\n  children: React.ReactNode;\n};\n\nexport function WindowCard({ title, subtitle, actions, className = \"\", children }: WindowCardProps) {\n  return (\n    <section className={`bg-white border border-gray-200 rounded-2xl shadow-lg p-6 md:p-8 ${className}`}>\n      {(title || subtitle) && (\n        <header className=\"mb-4\">\n          {title && <h2 className=\"text-xl md:text-2xl text-gray-900 leading-tight\">{title}</h2>}\n          {subtitle && <p className=\"text-sm text-gray-600 mt-1\">{subtitle}</p>}\n        </header>\n      )}\n      <div>{children}</div>\n      {actions && <div className=\"mt-6 flex items-center gap-3 justify-end\">{actions}</div>}\n    </section>\n  );\n}\n"
+    },
+    {
+      "id": "design-3",
+      "title": "Design 3",
+      "content": "Enter your design prompt content here..."
+    },
+    {
+      "id": "design-4",
+      "title": "Design 4",
+      "content": "Enter your design prompt content here..."
+    },
+    {
+      "id": "design-5",
+      "title": "Design 5",
+      "content": "Enter your design prompt content here..."
+    },
+    {
+      "id": "design-6",
+      "title": "Design 6",
+      "content": "Enter your design prompt content here..."
+    },
+    {
+      "id": "design-7",
+      "title": "Design 7",
+      "content": "Enter your design prompt content here..."
+    }
+  ],
+  "rupertPrompts": [
+    {
+      "id": "rupert-1",
+      "title": "Annotated Share",
+      "content": "For the stock chosen, get the share price, in weekly intervals, for the time period chosen, up to latest available share price.\nIn addition, find from newswire, 8 events which affected the share price, and show for them the data, and title of the event, in a single sentence."
+    },
+    {
+      "id": "rupert-2",
+      "title": "Data Mapping",
+      "content": "Company Data → Business Plan Allocation & Cleanup**\n\nYou are given two inputs:\n\n1. **Company Raw Data** – unstructured text about the company.\n2. **Business Plan Structure** – a list of topics and subtopics (standard business plan outline).\n\n**Your tasks are:**\n\n1. **Mapping:**\n\n   * Go through the company raw data.\n   * Allocate each relevant piece of information into the correct **topic → subtopic** within the business plan structure.\n   * Keep everything the user provided, do not add outside data.\n   * If a subtopic has no matching data, clearly mark it as **\"Not Available.\"**\n\n2. **Wordsmithing:**\n\n   * For each allocated data point, fix grammar, polish wording, and make it professional, sharp, and concise.\n   * Do not invent or add information; only refine what is already there.\n\n3. **Output Structure:**\n\n   * Present the final output **organized by topic and subtopic**, with the cleaned text under each.\n   * At the end of each topic, calculate **Completion %**:\n\n     * Formula = (# of subtopics with data) ÷ (total # of subtopics).\n     * Example: “4/7 answered → 57% Completion.”\n\n**Final Deliverables:**\n\n* A structured, professional version of the company’s data, broken down by business plan topics and subtopics.\n* A completion score for each topic showing how many subtopics were filled vs. total."
+    },
+    {
+      "id": "rupert-3",
+      "title": "Rupert 3",
+      "content": "Enter your Rupert prompt content here..."
+    },
+    {
+      "id": "rupert-4",
+      "title": "Rupert 4",
+      "content": "Enter your Rupert prompt content here..."
+    },
+    {
+      "id": "rupert-5",
+      "title": "Rupert 5",
+      "content": "Enter your Rupert prompt content here..."
+    },
+    {
+      "id": "rupert-6",
+      "title": "Rupert 6",
+      "content": "Enter your Rupert prompt content here..."
+    },
+    {
+      "id": "rupert-7",
+      "title": "Rupert 7",
+      "content": "Enter your Rupert prompt content here..."
+    }
+  ],
+  "dataPrompts": [
+    {
+      "id": "data-1",
+      "title": "Data Structure",
+      "content": "Business Plan Topics & Subtopics\n\n1. **Executive Summary**\n\n   * Company overview\n   * Market opportunity\n   * Key milestones\n   * Financial snapshot & funding\n\n2. **Business Overview**\n\n   * Mission & Vision\n   * Value Proposition\n   * Why Now\n   * Strategic Objectives\n\n3. **Market Analysis**\n\n   * Market Size & Growth\n   * Trends & Drivers\n   * Competitive Landscape\n\n4. **Products & Services**\n\n   * Offerings overview\n   * Problem–Solution Fit\n   * USPs\n   * Development Roadmap\n\n5. **Business Model**\n\n   * Revenue Model\n   * Unit Economics\n   * Partnerships & Channels\n\n6. **GTM**\n\n   * Target Customers\n   * Positioning & Messaging\n   * Marketing & Sales Strategy\n   * Retention & KPIs\n\n7. **Execution Plan**\n\n   * Operating Model\n   * Technology & Infrastructure\n   * Key Processes & Roadmap\n\n8. **Team**\n\n   * Leadership Team\n   * Advisors & Hiring Plan\n   * Culture & Governance\n\n9. **Financial Plan**\n\n   * Revenue & Expense Projections\n   * Profitability & Cash Flow\n   * Capital Requirements\n\n10. **Risk Analysis**\n\n* Market & Operational Risks\n* Financial & Legal Risks\n* Mitigation Strategies"
+    },
+    {
+      "id": "data-2",
+      "title": "Data 2",
+      "content": "Enter your data prompt content here..."
+    },
+    {
+      "id": "data-3",
+      "title": "Data 3",
+      "content": "Enter your data prompt content here..."
+    },
+    {
+      "id": "data-4",
+      "title": "Data 4",
+      "content": "Enter your data prompt content here..."
+    },
+    {
+      "id": "data-5",
+      "title": "Data 5",
+      "content": "Enter your data prompt content here..."
+    },
+    {
+      "id": "data-6",
+      "title": "Data 6",
+      "content": "Enter your data prompt content here..."
+    },
+    {
+      "id": "data-7",
+      "title": "Data 7",
+      "content": "Enter your data prompt content here..."
+    }
+  ]
+}

@@ -639,7 +639,7 @@ export default function OpenAICallPage() {
             {/* Left column: inputs (25%) */}
             <section className="md:col-span-1 space-y-4">
               <div className="bg-white border border-gray-200 rounded-xl p-8 shadow-lg">
-                <h2 className="text-lg font-normal mb-6">Inputs</h2>
+                <h2 className="text-[1.5rem] md:text-[1.75rem] font-normal mb-6">Inputs</h2>
 
                 {/* Data Collection Section */}
                 <div className="rounded-xl border border-gray-200 mb-4">
@@ -940,7 +940,7 @@ export default function OpenAICallPage() {
             <section className="md:col-span-3">
               <div className="bg-white border border-gray-200 rounded-xl p-8 shadow-lg h-full">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-lg font-normal">Response</h2>
+                  <h2 className="text-[1.5rem] md:text-[1.75rem] font-normal">Response</h2>
                   {(apiResult || errorMsg) && (
                     <div className="flex gap-2">
                       <button

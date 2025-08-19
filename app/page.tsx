@@ -41,41 +41,46 @@ export default function Home() {
   }, [currentText, isDeleting, currentWord, words]);
 
   const items = [
+          {
+        title: "Prompt Hub",
+        description: "Access comprehensive guides and documentation for all platform features.",
+        href: "/instructions-hub"
+      },
     {
-      title: "Price tracker",
-      description: "Track share prices with intelligent annotations.",
-      iconColor: "bg-blue-500"
+      title: "OpenAI",
+      description: "AI-powered tools and integrations for enhanced productivity.",
+      href: "/openai-call"
     },
     {
-      title: "Deck builder",
-      description: "AI-powered presentation creation with professional templates.",
-      iconColor: "bg-purple-500"
+      title: "Share Price",
+      description: "Real-time stock market data and price tracking tools.",
+      href: "/share-price"
     },
     {
-      title: "Investor hub",
-      description: "Investor relations platform with secure document sharing.",
-      iconColor: "bg-green-500"
+      title: "Company Data",
+      description: "Comprehensive company data tracking and analysis tools.",
+      href: "/portfolio"
     },
     {
       title: "Model builder",
       description: "Build financial models with automated calculations.",
-      iconColor: "bg-orange-500"
+      href: "#"
     },
     {
       title: "Data analytics",
       description: "Advanced analytics and insights with real-time dashboards.",
-      iconColor: "bg-red-500"
+      href: "#"
     }
   ];
 
   return (
     <div className="bg-white text-black">
       {/* Page Header */}
-      <header className="border-b border-gray-200 px-4 py-4">
+      <header className="border-b border-gray-200 px-4">
         <div className="page-wrap flex justify-between items-center">
-          <div className="text-xl">My project</div>
+          <div className="text-3xl">Hey Rupert!</div>
           <nav className="hidden md:flex space-x-4">
-            <a href="/openai-call" className="px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors duration-200 text-sm">OpenAI</a>
+            {/* Navigation buttons removed - accessible via grid cards below */}
           </nav>
         </div>
       </header>
@@ -84,7 +89,7 @@ export default function Home() {
         {/* Main Header Section */}
         <header className="py-8 md:py-10 lg:py-12">
           <div className="w-full">
-            <h1 className="text-5xl md:text-7xl text-gray-900 mb-6 leading-tight">
+            <h1 className="text-5xl md:text-7xl text-gray-900 mb-1 leading-tight">
               What would you like
               <br />
               the power to{' '}
@@ -97,16 +102,16 @@ export default function Home() {
         </header>
 
         {/* Main Grid Section */}
-        <section className="mt-8 md:mt-10 lg:mt-12">
+        <section className="mt-2 md:mt-2 lg:mt-3">
           <div className="w-full">
-            <h2 className="text-[1.5rem] md:text-[1.75rem] font-normal mb-6">Financial tools</h2>
-            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <h2 className="text-[1.5rem] md:text-[1.75rem] font-normal mb-2">Financial tools</h2>
+            <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {items.map((item, index) => (
                 <PriceTrackerCard
                   key={index}
                   title={item.title}
                   description={item.description}
-                  iconColor={item.iconColor}
+                  href={item.href}
                 />
               ))}
             </div>

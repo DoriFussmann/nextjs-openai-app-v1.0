@@ -4,18 +4,18 @@ interface PriceTrackerCardProps {
   title: string;
   description: string;
   icon?: React.ReactNode;
-  iconColor?: string;
   status?: 'active' | 'inactive' | 'pending';
   className?: string;
+  href?: string;
 }
 
 export default function PriceTrackerCard({
   title,
   description,
   icon,
-  iconColor = 'bg-[#EF4444]',
   status = 'active',
-  className = ''
+  className = '',
+  href
 }: PriceTrackerCardProps) {
   const statusConfig = {
     active: {
@@ -37,21 +37,30 @@ export default function PriceTrackerCard({
 
   const currentStatus = statusConfig[status];
 
+  const handleClick = () => {
+    if (href && href !== '#') {
+      window.location.href = href;
+    }
+  };
+
   return (
-    <div className={`
-      bg-white
-      border border-gray-200
-      rounded-xl
-      p-8
-      shadow-lg
-      hover:scale-105
-      transition-all duration-300
-      cursor-pointer
-      flex flex-col h-full
-      ${className}
-    `}>
+    <div 
+      className={`
+        bg-white
+        border border-gray-200
+        rounded-xl
+        p-8
+        shadow-lg
+        hover:scale-105
+        transition-all duration-300
+        cursor-pointer
+        flex flex-col h-full
+        ${className}
+      `}
+      onClick={handleClick}
+    >
       {/* Icon Section */}
-      <div className={`${iconColor} rounded-xl w-16 h-16 flex items-center justify-center mb-6`}>
+      <div className="bg-red-600 rounded-xl w-16 h-16 flex items-center justify-center mb-6">
         {icon ? (
           <div className="w-6 h-6 text-white">
             {icon}
