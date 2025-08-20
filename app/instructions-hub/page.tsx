@@ -37,6 +37,11 @@ export default function InstructionsHub() {
       id: `rupert-${i + 1}`,
       title: `Rupert ${i + 1}`,
       content: 'Enter your Rupert prompt content here...'
+    })),
+    dataPrompts: Array.from({length: 7}, (_, i) => ({
+      id: `data-${i + 1}`,
+      title: `Data ${i + 1}`,
+      content: 'Enter your data prompt content here...'
     }))
   });
   const [justCopied, setJustCopied] = useState(false);
@@ -50,44 +55,65 @@ export default function InstructionsHub() {
 
   const loadPromptsData = async () => {
     try {
-      // First try to load from localStorage
-      const localData = localStorage.getItem('promptsData');
-      if (localData) {
-        const parsedData = JSON.parse(localData);
-        
-        // Ensure all required arrays exist (migration for older data)
-        const migratedData = {
-          cursorPrompts: parsedData.cursorPrompts || [],
-          designPrompts: parsedData.designPrompts || [],
-          rupertPrompts: parsedData.rupertPrompts || Array.from({length: 7}, (_, i) => ({
-            id: `rupert-${i + 1}`,
-            title: `Rupert ${i + 1}`,
-            content: 'Enter your Rupert prompt content here...'
-          })),
-          dataPrompts: parsedData.dataPrompts || Array.from({length: 7}, (_, i) => ({
-            id: `data-${i + 1}`,
-            title: `Data ${i + 1}`,
-            content: 'Enter your data prompt content here...'
-          }))
-        };
-        
-        setPromptsData(migratedData);
-        // Save the migrated data back to localStorage
-        localStorage.setItem('promptsData', JSON.stringify(migratedData));
-        return;
+      // First load the base data from the file
+      let baseData = null;
+      try {
+        const response = await fetch('/data/prompts.json');
+        if (response.ok) {
+          baseData = await response.json();
+        }
+      } catch (error) {
+        console.error('Error loading base prompts file:', error);
       }
 
-      // Fallback to default data file
-      const response = await fetch('/data/prompts.json');
-      if (response.ok) {
-        const data = await response.json();
-        setPromptsData(data);
-        // Save to localStorage for future use
-        localStorage.setItem('promptsData', JSON.stringify(data));
+      // Then try to load from localStorage for user modifications
+      const localData = localStorage.getItem('promptsData');
+      console.log('Loading prompts - localStorage data found:', !!localData);
+      if (localData) {
+        try {
+          const parsedData = JSON.parse(localData);
+          console.log('Parsed localStorage data:', parsedData);
+          
+          // Merge with base data, giving priority to localStorage but ensuring all categories exist
+          const mergedData = {
+            cursorPrompts: parsedData.cursorPrompts || baseData?.cursorPrompts || Array.from({length: 7}, (_, i) => ({
+              id: `prompt-${i + 1}`,
+              title: `Prompt ${i + 1}`,
+              content: 'Enter your prompt content here...'
+            })),
+            designPrompts: parsedData.designPrompts || baseData?.designPrompts || Array.from({length: 7}, (_, i) => ({
+              id: `design-${i + 1}`,
+              title: `Design ${i + 1}`,
+              content: 'Enter your design prompt content here...'
+            })),
+            rupertPrompts: parsedData.rupertPrompts || baseData?.rupertPrompts || Array.from({length: 7}, (_, i) => ({
+              id: `rupert-${i + 1}`,
+              title: `Rupert ${i + 1}`,
+              content: 'Enter your Rupert prompt content here...'
+            })),
+            dataPrompts: parsedData.dataPrompts || baseData?.dataPrompts || Array.from({length: 7}, (_, i) => ({
+              id: `data-${i + 1}`,
+              title: `Data ${i + 1}`,
+              content: 'Enter your data prompt content here...'
+            }))
+          };
+          
+          setPromptsData(mergedData);
+          return;
+        } catch (error) {
+          console.error('Error parsing localStorage data:', error);
+        }
+      }
+
+      // Fallback to base data if localStorage failed or doesn't exist
+      if (baseData) {
+        setPromptsData(baseData);
+        // Save to localStorage for future modifications
+        localStorage.setItem('promptsData', JSON.stringify(baseData));
       }
     } catch (error) {
       console.error('Error loading prompts data:', error);
-      // Initialize with default data if loading fails
+      // Initialize with default data if everything fails
       const defaultData: PromptsData = {
         cursorPrompts: Array.from({length: 7}, (_, i) => ({
           id: `prompt-${i + 1}`,
@@ -174,8 +200,10 @@ export default function InstructionsHub() {
     }
 
     // Save to state and localStorage
+    console.log('Saving prompts data:', updatedPromptsData);
     setPromptsData(updatedPromptsData);
     localStorage.setItem('promptsData', JSON.stringify(updatedPromptsData));
+    console.log('Saved to localStorage successfully');
 
     // Save to file system (this will create/update the JSON file)
     try {

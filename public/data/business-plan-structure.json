@@ -1,0 +1,52 @@
+{
+  "topics": [
+    {
+      "topicId": "executive_summary",
+      "title": "Executive Summary",
+      "subtopics": [
+        {
+          "subtopicId": "company_overview",
+          "title": "Company Overview",
+          "keyQuestions": ["What does the company do?"]
+        },
+        {
+          "subtopicId": "market_opportunity",
+          "title": "Market Opportunity",
+          "keyQuestions": ["What problem is the company solving?"]
+        }
+      ]
+    },
+    {
+      "topicId": "product_service",
+      "title": "Product or Service",
+      "subtopics": [
+        {
+          "subtopicId": "description",
+          "title": "Description",
+          "keyQuestions": ["What is the product or service?"]
+        },
+        {
+          "subtopicId": "differentiation",
+          "title": "Differentiation",
+          "keyQuestions": ["What makes it different?"]
+        }
+      ]
+    },
+    {
+      "topicId": "team",
+      "title": "Team",
+      "subtopics": [
+        {
+          "subtopicId": "founders",
+          "title": "Founders",
+          "keyQuestions": ["Who are the key team members?"]
+        },
+        {
+          "subtopicId": "strengths",
+          "title": "Strengths",
+          "keyQuestions": ["What are the team's main strengths?"]
+        }
+      ]
+    }
+  ]
+}

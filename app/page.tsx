@@ -67,9 +67,9 @@ export default function Home() {
       href: "#"
     },
     {
-      title: "Data analytics",
-      description: "Advanced analytics and insights with real-time dashboards.",
-      href: "#"
+      title: "Analyze",
+      description: "AI-powered business plan data mapping and analysis.",
+      href: "/analyze"
     }
   ];
 
