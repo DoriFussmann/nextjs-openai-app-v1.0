@@ -23,6 +23,9 @@ export default function AnalyzePage() {
   const [dataPrompts, setDataPrompts] = useState<Array<{id: string, title: string, content: string}>>([]);
   const [selectedRupertPrompt, setSelectedRupertPrompt] = useState<string>("");
   const [selectedDataPrompt, setSelectedDataPrompt] = useState<string>("");
+  const [showAdmin, setShowAdmin] = useState(false);
+  const [isTestingAPI, setIsTestingAPI] = useState(false);
+  const [testSuccess, setTestSuccess] = useState(false);
 
   useEffect(() => {
     loadPromptsFromHub();
@@ -181,6 +184,41 @@ export default function AnalyzePage() {
     });
   }
 
+  const handleTestAPI = async () => {
+    setIsTestingAPI(true);
+    setTestSuccess(false);
+
+    try {
+      const response = await fetch('/api/openai', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          test: "Hello, this is a test message."
+        }),
+      });
+
+      if (response.ok) {
+        setTestSuccess(true);
+        // Hide success indicator after 1 second
+        setTimeout(() => {
+          setTestSuccess(false);
+        }, 1000);
+      } else {
+        const errorText = await response.text();
+        console.error('API test failed:', errorText);
+        setError('API test failed: ' + errorText);
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      console.error('API test failed:', error);
+      setError('API test failed: ' + errorMessage);
+    } finally {
+      setIsTestingAPI(false);
+    }
+  };
+
   async function onGenerate() {
     setLoading(true);
     setError(null);
@@ -264,64 +302,18 @@ export default function AnalyzePage() {
           <div className="border rounded-2xl p-4 bg-white shadow-sm sticky top-6">
             <h2 className="text-lg font-normal mb-3">Company Data</h2>
             
-            {/* Prompts from Prompts Hub */}
-            <div className="mb-4 space-y-4">
-              {/* Rupert Prompts Dropdown */}
-              <div>
-                <label className="block text-sm font-normal text-gray-700 mb-2">
-                  Rupert's Prompts
-                </label>
-                <select
-                  value={selectedRupertPrompt}
-                  onChange={(e) => handleRupertPromptSelection(e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="">Select a Rupert prompt...</option>
-                  {rupertPrompts.map((prompt) => (
-                    <option key={prompt.id} value={prompt.id}>
-                      {prompt.title}
-                    </option>
-                  ))}
-                </select>
-              </div>
 
-              {/* Data Prompts Dropdown */}
-              <div>
-                <label className="block text-sm font-normal text-gray-700 mb-2">
-                  Data Prompts
-                </label>
-                <select
-                  value={selectedDataPrompt}
-                  onChange={(e) => handleDataPromptSelection(e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                >
-                  <option value="">Select a data prompt...</option>
-                  {dataPrompts.map((prompt) => (
-                    <option key={prompt.id} value={prompt.id}>
-                      {prompt.title}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
             
             <textarea
               value={rawData}
               onChange={(e) => setRawData(e.target.value)}
               placeholder="Paste raw company data here…"
-              className="w-full h-64 border rounded-xl p-3 outline-none font-sans text-sm"
+              className="w-full h-64 border rounded-lg p-3 outline-none font-sans text-sm"
             />
-            <button
-              onClick={generateCompletePrompt}
-              disabled={!rawData.trim()}
-              className="mt-3 w-full rounded-xl border border-blue-200 bg-blue-50 px-4 py-2 hover:bg-blue-100 disabled:opacity-60 text-sm text-blue-800"
-            >
-              Complete Prompt
-            </button>
             <button
               onClick={onGenerate}
               disabled={loading || !rawData.trim()}
-              className="mt-2 w-full rounded-xl border px-4 py-2 hover:bg-gray-50 disabled:opacity-60 text-sm"
+              className="mt-2 w-full rounded-lg border px-3 py-2 hover:bg-gray-50 disabled:opacity-60 text-sm"
             >
               {loading ? "Generating…" : "Generate"}
             </button>
@@ -341,6 +333,84 @@ export default function AnalyzePage() {
                 </button>
               </div>
             )}
+            
+            {/* Admin Section */}
+            <div className="mt-4 border-t pt-4">
+              <button
+                onClick={() => setShowAdmin(!showAdmin)}
+                className="w-full rounded-lg border px-3 py-2 hover:bg-gray-50 text-sm"
+              >
+                {showAdmin ? 'Hide Admin' : 'Show Admin'}
+              </button>
+              
+              {showAdmin && (
+                <div className="mt-3 space-y-3">
+                  {/* Rupert Prompts Dropdown */}
+                  <div>
+                    <label className="block text-sm font-normal text-gray-700 mb-2">
+                      Rupert's Prompts
+                    </label>
+                    <select
+                      value={selectedRupertPrompt}
+                      onChange={(e) => handleRupertPromptSelection(e.target.value)}
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                      <option value="">Select</option>
+                      {rupertPrompts.map((prompt) => (
+                        <option key={prompt.id} value={prompt.id}>
+                          {prompt.title}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Data Prompts Dropdown */}
+                  <div>
+                    <label className="block text-sm font-normal text-gray-700 mb-2">
+                      Data Prompts
+                    </label>
+                    <select
+                      value={selectedDataPrompt}
+                      onChange={(e) => handleDataPromptSelection(e.target.value)}
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    >
+                      <option value="">Select</option>
+                      {dataPrompts.map((prompt) => (
+                        <option key={prompt.id} value={prompt.id}>
+                          {prompt.title}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  
+                  {/* Prompt and Test API Buttons */}
+                  <div className="flex space-x-3">
+                    <button
+                      onClick={generateCompletePrompt}
+                      disabled={!rawData.trim()}
+                      className="flex-1 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 hover:bg-blue-100 disabled:opacity-60 text-sm text-blue-800"
+                    >
+                      Prompt
+                    </button>
+                    <button
+                      onClick={handleTestAPI}
+                      disabled={isTestingAPI}
+                      className={`flex-1 rounded-lg border px-3 py-2 text-sm transition-colors ${
+                        testSuccess 
+                          ? 'bg-green-600 hover:bg-green-700 text-white border-green-600' 
+                          : 'hover:bg-gray-50 border-gray-300'
+                      }`}
+                    >
+                      {isTestingAPI ? 'Testing...' : testSuccess ? '✓ Success!' : 'Test API'}
+                    </button>
+                  </div>
+                  
+                  <div className="text-sm text-gray-600">
+                    Additional admin controls and settings will go here.
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
