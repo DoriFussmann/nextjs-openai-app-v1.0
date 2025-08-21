@@ -47,6 +47,11 @@ export default function Home() {
         href: "/instructions-hub"
       },
     {
+      title: "Analyze",
+      description: "AI-powered business plan data mapping and analysis.",
+      href: "/analyze"
+    },
+    {
       title: "OpenAI",
       description: "AI-powered tools and integrations for enhanced productivity.",
       href: "/openai-call"
@@ -57,19 +62,14 @@ export default function Home() {
       href: "/share-price"
     },
     {
-      title: "Company Data",
-      description: "Comprehensive company data tracking and analysis tools.",
+      title: "Portfolio Analysis",
+      description: "Visual-only clone of Share Price layout (no page-level interactivity).",
       href: "/portfolio"
     },
     {
       title: "Model builder",
-      description: "Build financial models with automated calculations.",
-      href: "#"
-    },
-    {
-      title: "Analyze",
-      description: "AI-powered business plan data mapping and analysis.",
-      href: "/analyze"
+      description: "AI-powered financial model building with schema-aware guidance.",
+      href: "/model-builder"
     }
   ];
 
@@ -104,7 +104,7 @@ export default function Home() {
         {/* Main Grid Section */}
         <section className="mt-2 md:mt-2 lg:mt-3">
           <div className="w-full">
-            <h2 className="text-[1.5rem] md:text-[1.75rem] font-normal mb-2">Financial tools</h2>
+            <h2 className="text-[1.5rem] md:text-[1.75rem] font-normal mb-6">Financial tools</h2>
             <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {items.map((item, index) => (
                 <PriceTrackerCard
