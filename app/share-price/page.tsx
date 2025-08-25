@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/Button';
+import { Header } from '@/components/layout/Header';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -12,6 +13,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import annotationPlugin from 'chartjs-plugin-annotation';
 import { Line } from 'react-chartjs-2';
 
 ChartJS.register(
@@ -21,7 +23,8 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  annotationPlugin
 );
 
 interface Prompt {
@@ -50,6 +53,8 @@ export default function SharePrice() {
   const [keyEvents, setKeyEvents] = useState<any[]>([]);
   const [showBottomBox, setShowBottomBox] = useState<boolean>(false);
   const [isInitialized, setIsInitialized] = useState<boolean>(false);
+  const [showActionsDropdown, setShowActionsDropdown] = useState<boolean>(false);
+  const [showProjectsSubmenu, setShowProjectsSubmenu] = useState<boolean>(false);
 
   useEffect(() => {
     loadRupertPrompts();
@@ -135,7 +140,7 @@ export default function SharePrice() {
 
     try {
       const requestBody = {
-        prompt: `${selectedPromptData.content}\n\nStock: ${selectedStock}\nTime Period: ${selectedTimePeriod}`,
+        prompt: `${selectedPromptData.content}\n\nStock: ${selectedStock}\nTime Period: ${selectedTimePeriod}\n\nPlease provide 6 key events that impacted the stock price. Keep event descriptions concise (max 4-5 words). Format dates as YYYY-MM-DD and include price data.`,
         action: 'data-handling'
       };
 
@@ -323,82 +328,8 @@ export default function SharePrice() {
               backgroundColor: 'rgba(59, 130, 246, 0.1)',
               borderWidth: 2,
               tension: 0.4,
-              pointRadius: function(context: any) {
-                const chart = context.chart;
-                const dataIndex = context.dataIndex;
-                const label = chart.data.labels[dataIndex];
-                
-                // Check if this date matches any key event
-                const hasEvent = keyEvents.some(event => {
-                  if (event.date === 'N/A') return false;
-                  // Format event date to match chart label format
-                  const eventDate = new Date(event.date);
-                  const eventLabel = eventDate.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
-                  return eventLabel === label;
-                });
-                
-                return hasEvent ? 6 : 0;
-              },
-              pointHoverRadius: function(context: any) {
-                const chart = context.chart;
-                const dataIndex = context.dataIndex;
-                const label = chart.data.labels[dataIndex];
-                
-                // Check if this date matches any key event
-                const hasEvent = keyEvents.some(event => {
-                  if (event.date === 'N/A') return false;
-                  const eventDate = new Date(event.date);
-                  const eventLabel = eventDate.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
-                  return eventLabel === label;
-                });
-                
-                return hasEvent ? 8 : 0;
-              },
-              pointBackgroundColor: function(context: any) {
-                const chart = context.chart;
-                const dataIndex = context.dataIndex;
-                const label = chart.data.labels[dataIndex];
-                
-                // Check if this date matches any key event
-                const hasEvent = keyEvents.some(event => {
-                  if (event.date === 'N/A') return false;
-                  const eventDate = new Date(event.date);
-                  const eventLabel = eventDate.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
-                  return eventLabel === label;
-                });
-                
-                return hasEvent ? 'rgb(239, 68, 68)' : 'transparent';
-              },
-              pointBorderColor: function(context: any) {
-                const chart = context.chart;
-                const dataIndex = context.dataIndex;
-                const label = chart.data.labels[dataIndex];
-                
-                // Check if this date matches any key event
-                const hasEvent = keyEvents.some(event => {
-                  if (event.date === 'N/A') return false;
-                  const eventDate = new Date(event.date);
-                  const eventLabel = eventDate.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
-                  return eventLabel === label;
-                });
-                
-                return hasEvent ? 'white' : 'transparent';
-              },
-              pointBorderWidth: function(context: any) {
-                const chart = context.chart;
-                const dataIndex = context.dataIndex;
-                const label = chart.data.labels[dataIndex];
-                
-                // Check if this date matches any key event
-                const hasEvent = keyEvents.some(event => {
-                  if (event.date === 'N/A') return false;
-                  const eventDate = new Date(event.date);
-                  const eventLabel = eventDate.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
-                  return eventLabel === label;
-                });
-                
-                return hasEvent ? 2 : 0;
-              },
+              pointRadius: 0,
+              pointHoverRadius: 4,
             },
           ],
         });
@@ -439,82 +370,8 @@ export default function SharePrice() {
               backgroundColor: 'rgba(59, 130, 246, 0.1)',
               borderWidth: 2,
               tension: 0.4,
-              pointRadius: function(context: any) {
-                const chart = context.chart;
-                const dataIndex = context.dataIndex;
-                const label = chart.data.labels[dataIndex];
-                
-                // Check if this date matches any key event
-                const hasEvent = keyEvents.some(event => {
-                  if (event.date === 'N/A') return false;
-                  // Format event date to match chart label format
-                  const eventDate = new Date(event.date);
-                  const eventLabel = eventDate.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
-                  return eventLabel === label;
-                });
-                
-                return hasEvent ? 6 : 0;
-              },
-              pointHoverRadius: function(context: any) {
-                const chart = context.chart;
-                const dataIndex = context.dataIndex;
-                const label = chart.data.labels[dataIndex];
-                
-                // Check if this date matches any key event
-                const hasEvent = keyEvents.some(event => {
-                  if (event.date === 'N/A') return false;
-                  const eventDate = new Date(event.date);
-                  const eventLabel = eventDate.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
-                  return eventLabel === label;
-                });
-                
-                return hasEvent ? 8 : 0;
-              },
-              pointBackgroundColor: function(context: any) {
-                const chart = context.chart;
-                const dataIndex = context.dataIndex;
-                const label = chart.data.labels[dataIndex];
-                
-                // Check if this date matches any key event
-                const hasEvent = keyEvents.some(event => {
-                  if (event.date === 'N/A') return false;
-                  const eventDate = new Date(event.date);
-                  const eventLabel = eventDate.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
-                  return eventLabel === label;
-                });
-                
-                return hasEvent ? 'rgb(239, 68, 68)' : 'transparent';
-              },
-              pointBorderColor: function(context: any) {
-                const chart = context.chart;
-                const dataIndex = context.dataIndex;
-                const label = chart.data.labels[dataIndex];
-                
-                // Check if this date matches any key event
-                const hasEvent = keyEvents.some(event => {
-                  if (event.date === 'N/A') return false;
-                  const eventDate = new Date(event.date);
-                  const eventLabel = eventDate.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
-                  return eventLabel === label;
-                });
-                
-                return hasEvent ? 'white' : 'transparent';
-              },
-              pointBorderWidth: function(context: any) {
-                const chart = context.chart;
-                const dataIndex = context.dataIndex;
-                const label = chart.data.labels[dataIndex];
-                
-                // Check if this date matches any key event
-                const hasEvent = keyEvents.some(event => {
-                  if (event.date === 'N/A') return false;
-                  const eventDate = new Date(event.date);
-                  const eventLabel = eventDate.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
-                  return eventLabel === label;
-                });
-                
-                return hasEvent ? 2 : 0;
-              },
+              pointRadius: 0,
+              pointHoverRadius: 4,
             },
           ],
         });
@@ -541,57 +398,107 @@ Additional context:
 - Stock: ${selectedStock}
 - Time Period: ${selectedTimePeriod}`;
   };
+
+  const getRandomProjects = () => {
+    const projectNames = [
+      'Q4 Financial Analysis', 'Market Research 2024', 'Investment Portfolio Review',
+      'Tech Stock Analysis', 'Growth Strategy Planning', 'Risk Assessment Report',
+      'Quarterly Performance', 'Sector Comparison Study', 'Dividend Analysis',
+      'ESG Investment Review', 'Emerging Markets Study', 'Blue Chip Portfolio',
+      'Startup Valuations', 'Crypto Analysis', 'Real Estate Investment',
+      'Commodity Trading', 'Bond Portfolio Review', 'International Markets',
+      'Small Cap Research', 'Value Investing Study'
+    ];
+    
+    const shuffled = [...projectNames].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, 5);
+  };
+
+  const handleAddToProjects = () => {
+    setShowActionsDropdown(false);
+    setShowProjectsSubmenu(false);
+    // TODO: Implement add to projects functionality
+    console.log('Add to Projects clicked');
+  };
+
+  const handleAddToSpecificProject = (projectName: string) => {
+    setShowActionsDropdown(false);
+    setShowProjectsSubmenu(false);
+    // TODO: Implement add to specific project functionality
+    console.log('Added to project:', projectName);
+  };
+
+  const handleAddNewProject = () => {
+    setShowActionsDropdown(false);
+    setShowProjectsSubmenu(false);
+    // TODO: Implement add new project functionality
+    console.log('Add new project clicked');
+  };
+
+  const handleSaveToFavorites = () => {
+    setShowActionsDropdown(false);
+    // TODO: Implement save to favorites functionality
+    console.log('Save to Favorites clicked');
+  };
+
+  const handleClearData = () => {
+    setShowActionsDropdown(false);
+    setResponse('');
+    setChartData(null);
+    setKeyEvents([]);
+    console.log('Data cleared');
+  };
+
+  const createAnnotationsFromEvents = (events: any[], chartLabels: string[]) => {
+    return events.map((event, index) => {
+      if (event.date === 'N/A') return null;
+      
+      // Find the matching chart label index
+      const eventDate = new Date(event.date);
+      const eventLabel = eventDate.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
+      const labelIndex = chartLabels.findIndex(label => label === eventLabel);
+      
+      if (labelIndex === -1) return null;
+      
+      // Format date as MMM/YY
+      const shortDate = eventDate.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
+      
+      return {
+        type: 'label' as const,
+        xValue: labelIndex,
+        yValue: 'max',
+        backgroundColor: 'rgba(59, 130, 246, 0.8)',
+        borderColor: 'rgb(59, 130, 246)',
+        borderWidth: 2,
+        borderRadius: 4,
+        color: 'white',
+        content: [`${shortDate}`, event.event.substring(0, 20)],
+        font: {
+          size: 10
+        },
+        padding: 4,
+        position: 'start',
+        yAdjust: -20 - (index % 3) * 25, // Stagger annotations vertically
+        callout: {
+          enabled: true,
+          position: 'bottom',
+          borderColor: 'rgb(59, 130, 246)',
+          borderWidth: 1,
+          margin: 5
+        }
+      };
+    }).filter(annotation => annotation !== null);
+  };
   return (
-    <div className="bg-white text-black font-inter">
-      {/* Page Header */}
-      <header className="border-b border-gray-200 px-4">
-        <div className="page-wrap flex justify-between items-center">
-          <div className="text-3xl">Share Price</div>
-          <nav className="hidden md:flex space-x-4">
-            <Button 
-              variant="secondary" 
-              size="sm"
-              className="!rounded-lg"
-              onClick={() => {
-                // Clear outputs and UI state
-                setResponse('');
-                setChartData(null);
-                setKeyEvents([]);
-                setShowBottomBox(false);
-                
-                // Reset form inputs to defaults (except Rupert's prompts)
-                setSelectedStock('Apple');
-                setSelectedTimePeriod('1 Year');
-                // Note: selectedPrompt is NOT reset - it keeps current selection
-                
-                // Update localStorage with reset values
-                const resetFormData = {
-                  selectedStock: 'Apple',
-                  selectedTimePeriod: '1 Year',
-                };
-                localStorage.setItem('sharePageFormData', JSON.stringify(resetFormData));
-              }}
-            >
-              Reset
-            </Button>
-            <Button 
-              variant="secondary" 
-              size="sm"
-              className="!rounded-lg"
-              onClick={() => window.location.href = '/'}
-            >
-              Home
-            </Button>
-          </nav>
-        </div>
-      </header>
+    <div className="bg-white text-black">
+      <Header title="Share Price" />
 
       <main className="page-wrap">
         {/* Two Column Layout */}
         <div className="flex gap-6 min-h-[calc(100vh-300px)] -mt-4">
           {/* Left Sidebar - Inputs (25%) */}
           <div className="w-1/4">
-            <div className="bg-white border border-gray-200 rounded-xl p-8 shadow-lg h-full">
+            <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-lg h-full">
               <h2 className="text-xl text-gray-900 mb-6">Inputs</h2>
               <div className="space-y-6">
                 <div>
@@ -638,7 +545,7 @@ Additional context:
                       onClick={() => setShowBottomBox(!showBottomBox)}
                     >
                       <div className="text-sm text-gray-700">Admin</div>
-                      <button className="text-xs text-blue-600 hover:text-blue-800 font-medium">
+                      <button className="text-xs text-blue-600 hover:text-blue-800 font-normal">
                         {showBottomBox ? 'Hide' : 'Show'}
                       </button>
                     </div>
@@ -692,14 +599,88 @@ Additional context:
 
           {/* Right Content Area - Outputs (75%) */}
           <div className="w-3/4">
-            <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-lg h-full">
-              <h2 className="text-xl text-gray-900 mb-3">Share Price Data</h2>
+            <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-lg h-full">
+              <div className="flex justify-between items-center mb-3">
+                <h2 className="text-xl text-gray-900">Annotated share price performance</h2>
+                <div className="relative">
+                  <button
+                    onClick={() => setShowActionsDropdown(!showActionsDropdown)}
+                    onBlur={() => setTimeout(() => setShowActionsDropdown(false), 150)}
+                    className="w-8 h-8 rounded-lg border border-gray-300 hover:bg-gray-50 flex items-center justify-center transition-colors"
+                    title="Actions"
+                  >
+                    <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                  </button>
+                  
+                  {showActionsDropdown && (
+                    <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                      <div className="py-1">
+                        <div className="relative">
+                          <button
+                            onMouseEnter={() => setShowProjectsSubmenu(true)}
+                            onMouseLeave={() => setShowProjectsSubmenu(false)}
+                            onClick={handleAddToProjects}
+                            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors flex items-center justify-between"
+                          >
+                            Add to Projects
+                            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                          </button>
+                          
+                          {showProjectsSubmenu && (
+                            <div 
+                              className="absolute left-full top-0 ml-1 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-20"
+                              onMouseEnter={() => setShowProjectsSubmenu(true)}
+                              onMouseLeave={() => setShowProjectsSubmenu(false)}
+                            >
+                              <div className="py-1">
+                                {getRandomProjects().map((project, index) => (
+                                  <button
+                                    key={index}
+                                    onClick={() => handleAddToSpecificProject(project)}
+                                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                                  >
+                                    {project}
+                                  </button>
+                                ))}
+                                <hr className="my-1 border-gray-200" />
+                                <button
+                                  onClick={handleAddNewProject}
+                                  className="w-full text-left px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 transition-colors font-medium"
+                                >
+                                  + Add new
+                                </button>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                        <button
+                          onClick={handleSaveToFavorites}
+                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                        >
+                          Save to My Favorites
+                        </button>
+                        <hr className="my-1 border-gray-200" />
+                        <button
+                          onClick={handleClearData}
+                          className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                        >
+                          Clear
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
               
               {/* Chart Display */}
               {chartData && (
                 <div className="mt-4 mb-6">
                   <div className="bg-white border border-gray-200 rounded-lg p-4">
-                    <div className="h-64">
+                    <div className="w-full aspect-video">
                       <Line 
                         data={chartData} 
                         options={{
@@ -712,6 +693,9 @@ Additional context:
                             title: {
                               display: false,
                             },
+                            annotation: {
+                              annotations: createAnnotationsFromEvents(keyEvents, chartData?.labels || [])
+                            }
                           },
                           scales: {
                             y: {
@@ -719,9 +703,12 @@ Additional context:
                               title: {
                                 display: false,
                               },
-                              grace: '10%',
+                              grace: '20%',
                               ticks: {
                                 maxTicksLimit: 6,
+                                callback: function(value: any) {
+                                  return '$' + Number(value).toFixed(0);
+                                }
                               },
                             },
                             x: {
@@ -746,26 +733,28 @@ Additional context:
                 </div>
               )}
 
-              {/* Key Events */}
+              {/* Key Events - Separate Box */}
               {keyEvents.length > 0 && (
                 <div className="mt-4 mb-6">
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">Key Events</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {keyEvents.map((event, index) => (
-                      <div key={index} className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4">
-                        <div className="flex items-start space-x-3">
-                          <div className="flex-shrink-0">
-                            <div className="w-3 h-3 bg-blue-500 rounded-full mt-1"></div>
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            {event.date !== 'N/A' && (
-                              <p className="text-sm font-medium text-blue-600 mb-1">{event.date}</p>
-                            )}
-                            <p className="text-sm text-gray-800">{event.event}</p>
+                  <div className="bg-white border border-gray-200 rounded-lg p-4">
+                    <h3 className="text-lg font-normal text-gray-900 mb-4">Key Events</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {keyEvents.map((event, index) => (
+                        <div key={index} className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4">
+                          <div className="flex items-start space-x-3">
+                            <div className="flex-shrink-0">
+                              <div className="w-3 h-3 bg-blue-500 rounded-full mt-1"></div>
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              {event.date !== 'N/A' && (
+                                <p className="text-sm font-normal text-blue-600 mb-1">{event.date}</p>
+                              )}
+                              <p className="text-sm text-gray-800">{event.event}</p>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 </div>
               )}
@@ -822,7 +811,7 @@ Additional context:
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-semibold text-gray-900">Complete Prompt</h3>
+              <h3 className="text-xl font-normal text-gray-900">Complete Prompt</h3>
               <button
                 onClick={() => setShowPromptModal(false)}
                 className="text-gray-400 hover:text-gray-600"

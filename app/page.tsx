@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import PriceTrackerCard from '@/components/PriceTrackerCard';
+import { BookOpen, BarChart3, Bot, TrendingUp, PieChart, Wrench, LayoutDashboard } from 'lucide-react';
 
 export default function Home() {
   const [currentWord, setCurrentWord] = useState(0);
@@ -40,36 +41,58 @@ export default function Home() {
     return () => clearTimeout(timeout);
   }, [currentText, isDeleting, currentWord, words]);
 
-  const items = [
-          {
-        title: "Prompt Hub",
-        description: "Access comprehensive guides and documentation for all platform features.",
-        href: "/instructions-hub"
-      },
+  const rupertTools = [
     {
-      title: "Analyze",
+      title: "Prompt Hub",
+      description: "Access comprehensive guides and documentation for all platform features.",
+      href: "/prompt-hub",
+      icon: <BookOpen />,
+      iconColor: "bg-blue-600"
+    },
+    {
+      title: "Data Mapper",
       description: "AI-powered business plan data mapping and analysis.",
-      href: "/analyze"
-    },
-    {
-      title: "OpenAI",
-      description: "AI-powered tools and integrations for enhanced productivity.",
-      href: "/openai-call"
-    },
-    {
-      title: "Share Price",
-      description: "Real-time stock market data and price tracking tools.",
-      href: "/share-price"
-    },
-    {
-      title: "Portfolio Analysis",
-      description: "Visual-only clone of Share Price layout (no page-level interactivity).",
-      href: "/portfolio"
+      href: "/data-mapper",
+      icon: <BarChart3 />,
+      iconColor: "bg-green-600"
     },
     {
       title: "Model builder",
       description: "AI-powered financial model building with schema-aware guidance.",
-      href: "/model-builder"
+      href: "/model-builder",
+      icon: <Wrench />,
+      iconColor: "bg-purple-600"
+    }
+  ];
+
+  const financialTools = [
+    {
+      title: "OpenAI",
+      description: "AI-powered tools and integrations for enhanced productivity.",
+      href: "/openai",
+      icon: <Bot />,
+      iconColor: "bg-orange-600"
+    },
+    {
+      title: "Share Price",
+      description: "Real-time stock market data and price tracking tools.",
+      href: "/share-price",
+      icon: <TrendingUp />,
+      iconColor: "bg-emerald-600"
+    },
+    {
+      title: "Portfolio Analysis",
+      description: "Visual-only clone of Share Price layout (no page-level interactivity).",
+      href: "/portfolio-analysis",
+      icon: <PieChart />,
+      iconColor: "bg-indigo-600"
+    },
+    {
+      title: "Portfolio Dashboard",
+      description: "Visual portfolio analysis dashboard with charts and insights.",
+      href: "/portfolio-analysis",
+      icon: <LayoutDashboard />,
+      iconColor: "bg-pink-600"
     }
   ];
 
@@ -78,7 +101,7 @@ export default function Home() {
       {/* Page Header */}
       <header className="border-b border-gray-200 px-4">
         <div className="page-wrap flex justify-between items-center">
-          <div className="text-3xl">Hey Rupert!</div>
+          <div className="text-3xl leading-none">Hey Rupert!</div>
           <nav className="hidden md:flex space-x-4">
             {/* Navigation buttons removed - accessible via grid cards below */}
           </nav>
@@ -101,17 +124,38 @@ export default function Home() {
           </div>
         </header>
 
-        {/* Main Grid Section */}
+        {/* Rupert's Tools Section */}
         <section className="mt-2 md:mt-2 lg:mt-3">
           <div className="w-full">
-            <h2 className="text-[1.5rem] md:text-[1.75rem] font-normal mb-6">Financial tools</h2>
+            <h2 className="text-[1.5rem] md:text-[1.75rem] font-normal mb-6">Rupert's tools</h2>
             <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {items.map((item, index) => (
+              {rupertTools.map((item, index) => (
                 <PriceTrackerCard
                   key={index}
                   title={item.title}
                   description={item.description}
                   href={item.href}
+                  icon={item.icon}
+                  iconColor={item.iconColor}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Financial Tools Section */}
+        <section className="mt-8 md:mt-10 lg:mt-12">
+          <div className="w-full">
+            <h2 className="text-[1.5rem] md:text-[1.75rem] font-normal mb-6">Financial tools</h2>
+            <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {financialTools.map((item, index) => (
+                <PriceTrackerCard
+                  key={index}
+                  title={item.title}
+                  description={item.description}
+                  href={item.href}
+                  icon={item.icon}
+                  iconColor={item.iconColor}
                 />
               ))}
             </div>

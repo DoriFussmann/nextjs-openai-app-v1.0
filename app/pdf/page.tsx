@@ -58,7 +58,7 @@ export default function PdfIngestPage() {
 
   return (
     <div className="max-w-3xl mx-auto p-6 space-y-4">
-      <h1 className="text-2xl font-medium">PDF → Text (Simple Extraction)</h1>
+      <h1 className="text-2xl font-normal">PDF → Text (Simple Extraction)</h1>
       
       <form onSubmit={onSubmit} className="space-x-3">
         <input
@@ -69,7 +69,7 @@ export default function PdfIngestPage() {
         <button
           type="submit"
           disabled={!file || loading}
-          className="px-3 py-2 border rounded disabled:opacity-50"
+          className="px-3 py-2 border rounded-lg disabled:opacity-50"
         >
           {loading ? "Processing…" : "Upload & Extract"}
         </button>
@@ -78,7 +78,7 @@ export default function PdfIngestPage() {
       {/* Status Display */}
       {status && (
         <div className="p-3 bg-gray-50 border rounded">
-          <div className="font-medium text-sm">{status}</div>
+          <div className="font-normal text-sm">{status}</div>
           {loading && progress.startTime && (
             <div className="text-xs text-gray-600 mt-1">
               Processing for {Math.floor((Date.now() - progress.startTime) / 1000)}s...
@@ -108,7 +108,7 @@ export default function PdfIngestPage() {
       )}
 
       <textarea
-        className="w-full h-96 p-3 border rounded font-mono text-sm"
+        className="w-full h-96 p-3 border rounded-lg font-mono text-sm"
         value={result}
         onChange={() => {}}
         placeholder="Extracted text will appear here…"

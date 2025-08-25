@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Home } from "lucide-react";
+import { Header } from "@/components/layout/Header";
 
 export default function ModelBuilderPage() {
   const [modelState, setModelState] = useState<any>({});
@@ -68,18 +69,9 @@ export default function ModelBuilderPage() {
 
   return (
     <div className="min-h-screen bg-white text-black">
-      {/* Header with Home Button */}
-      <div className="border-b border-gray-200 px-6 py-4">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <h1 className="text-sm font-normal">Model Builder</h1>
-          <Link href="/" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
-            <Home className="h-4 w-4" />
-            <span>Home</span>
-          </Link>
-        </div>
-      </div>
+      <Header title="Model builder" />
 
-      <div className="max-w-7xl mx-auto p-6">
+      <div className="page-wrap">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <aside className="md:col-span-1 border border-gray-200 rounded-lg p-4 bg-white shadow-sm">
             <h3 className="text-sm font-normal mb-2">Model Snapshot</h3>

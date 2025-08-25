@@ -20,7 +20,7 @@ export default function TopicBoxes({ topics }: { topics: TopicBoxProps[] }) {
         <div
           key={topic.topicId}
           onClick={() => handleClick(topic.topicId)}
-          className="cursor-pointer border rounded-xl p-4 hover:bg-gray-50 transition"
+          className="cursor-pointer border rounded-lg p-4 hover:bg-gray-50 transition"
         >
           <h3 className="font-normal text-sm">{topic.title}</h3>
           <div className="w-full bg-gray-200 h-2 rounded mt-2">

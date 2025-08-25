@@ -137,7 +137,7 @@ function Menu({
 
       {open && (
         <div
-          className="absolute right-0 z-20 mt-2 w-44 rounded-xl border border-gray-200 bg-white p-1 shadow-lg"
+          className="absolute right-0 z-20 mt-2 w-44 rounded-lg border border-gray-200 bg-white p-1 shadow-lg"
           onMouseLeave={() => setOpen(false)}
         >
           <MenuItem label="AI-Modify" onClick={() => { setOpen(false); onAiModify(); }} disabled={disabled} />

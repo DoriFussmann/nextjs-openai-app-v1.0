@@ -7,6 +7,7 @@ interface PriceTrackerCardProps {
   status?: 'active' | 'inactive' | 'pending';
   className?: string;
   href?: string;
+  iconColor?: string;
 }
 
 export default function PriceTrackerCard({
@@ -15,7 +16,8 @@ export default function PriceTrackerCard({
   icon,
   status = 'active',
   className = '',
-  href
+  href,
+  iconColor = 'bg-red-600'
 }: PriceTrackerCardProps) {
   const statusConfig = {
     active: {
@@ -48,7 +50,7 @@ export default function PriceTrackerCard({
       className={`
         bg-white
         border border-gray-200
-        rounded-xl
+        rounded-lg
         p-8
         shadow-lg
         hover:scale-105
@@ -60,7 +62,7 @@ export default function PriceTrackerCard({
       onClick={handleClick}
     >
       {/* Icon Section */}
-      <div className="bg-red-600 rounded-xl w-16 h-16 flex items-center justify-center mb-6">
+      <div className={`${iconColor} rounded-lg w-16 h-16 flex items-center justify-center mb-6`}>
         {icon ? (
           <div className="w-6 h-6 text-white">
             {icon}
