@@ -477,11 +477,11 @@ Additional context:
           size: 10
         },
         padding: 4,
-        position: 'start',
+        position: 'start' as const,
         yAdjust: -20 - (index % 3) * 25, // Stagger annotations vertically
         callout: {
           enabled: true,
-          position: 'bottom',
+          position: 'bottom' as const,
           borderColor: 'rgb(59, 130, 246)',
           borderWidth: 1,
           margin: 5
