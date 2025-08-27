@@ -54,26 +54,61 @@ export default function InstructionsHub() {
     loadPromptsData();
   }, []);
 
+  // Debug: Log final prompts data whenever it changes
+  useEffect(() => {
+    console.log('📊 Final prompts data state:', {
+      cursorPrompts: promptsData.cursorPrompts?.length || 0,
+      designPrompts: promptsData.designPrompts?.length || 0,
+      rupertPrompts: promptsData.rupertPrompts?.length || 0,
+      dataPrompts: promptsData.dataPrompts?.length || 0
+    });
+
+    // Check specifically for Helpers prompt
+    const helpersPrompt = promptsData.rupertPrompts?.find(p => p.title === 'Helpers');
+    if (helpersPrompt) {
+      console.log('🎯 "Helpers" prompt is available:', helpersPrompt.title);
+    } else {
+      console.log('❓ "Helpers" prompt not found in current state');
+      console.log('Available Rupert prompts:', promptsData.rupertPrompts?.map(p => p.title));
+    }
+  }, [promptsData]);
+
   const loadPromptsData = async () => {
     try {
+      console.log('🔄 Starting prompts data load...');
+
       // First load the base data from the file
       let baseData = null;
       try {
+        console.log('📂 Loading base data from /data/prompts.json...');
         const response = await fetch('/data/prompts.json');
         if (response.ok) {
           baseData = await response.json();
+          console.log('✅ Base data loaded successfully:', {
+            cursorPrompts: baseData?.cursorPrompts?.length || 0,
+            designPrompts: baseData?.designPrompts?.length || 0,
+            rupertPrompts: baseData?.rupertPrompts?.length || 0,
+            dataPrompts: baseData?.dataPrompts?.length || 0
+          });
+        } else {
+          console.log('❌ Failed to load base data, status:', response.status);
         }
       } catch (error) {
-        console.error('Error loading base prompts file:', error);
+        console.error('❌ Error loading base prompts file:', error);
       }
 
       // Then try to load from localStorage for user modifications
       const localData = localStorage.getItem('promptsData');
-      console.log('Loading prompts - localStorage data found:', !!localData);
+      console.log('💾 Loading prompts - localStorage data found:', !!localData);
       if (localData) {
         try {
           const parsedData = JSON.parse(localData);
-          console.log('Parsed localStorage data:', parsedData);
+          console.log('✅ Parsed localStorage data:', {
+            cursorPrompts: parsedData?.cursorPrompts?.length || 0,
+            designPrompts: parsedData?.designPrompts?.length || 0,
+            rupertPrompts: parsedData?.rupertPrompts?.length || 0,
+            dataPrompts: parsedData?.dataPrompts?.length || 0
+          });
           
           // Merge with base data, giving priority to localStorage but ensuring all categories exist
           const mergedData = {
@@ -98,8 +133,18 @@ export default function InstructionsHub() {
               content: 'Enter your data prompt content here...'
             }))
           };
-          
+
+          console.log('🔍 Checking for "Helpers" prompt in rupertPrompts...');
+          const helpersPrompt = mergedData.rupertPrompts?.find(p => p.title === 'Helpers');
+          if (helpersPrompt) {
+            console.log('✅ Found "Helpers" prompt:', helpersPrompt);
+          } else {
+            console.log('❌ "Helpers" prompt not found in merged data');
+            console.log('Available rupertPrompts:', mergedData.rupertPrompts?.map(p => p.title));
+          }
+
           setPromptsData(mergedData);
+          console.log('✅ Final prompts data set with merged data');
           return;
         } catch (error) {
           console.error('Error parsing localStorage data:', error);
@@ -108,9 +153,35 @@ export default function InstructionsHub() {
 
       // Fallback to base data if localStorage failed or doesn't exist
       if (baseData) {
+        console.log('🔄 Using base data as fallback');
+        console.log('🔍 Checking for "Helpers" prompt in base rupertPrompts...');
+        const helpersPrompt = baseData.rupertPrompts?.find(p => p.title === 'Helpers');
+        if (helpersPrompt) {
+          console.log('✅ Found "Helpers" prompt in base data:', helpersPrompt);
+        } else {
+          console.log('❌ "Helpers" prompt not found in base data');
+          console.log('Available base rupertPrompts:', baseData.rupertPrompts?.map(p => p.title));
+        }
+
         setPromptsData(baseData);
         // Save to localStorage for future modifications
         localStorage.setItem('promptsData', JSON.stringify(baseData));
+        console.log('💾 Saved base data to localStorage');
+
+        // Also sync to public directory
+        try {
+          console.log('🔄 Syncing base data to public directory...');
+          await fetch('/api/save-prompts?public=true', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(baseData),
+          });
+          console.log('✅ Public directory synced successfully');
+        } catch (error) {
+          console.error('❌ Error syncing to public directory:', error);
+        }
       }
     } catch (error) {
       console.error('Error loading prompts data:', error);
@@ -208,15 +279,38 @@ export default function InstructionsHub() {
 
     // Save to file system (this will create/update the JSON file)
     try {
-      await fetch('/api/save-prompts', {
+      console.log('💾 Saving to main data file...');
+      const mainResponse = await fetch('/api/save-prompts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(updatedPromptsData),
       });
+
+      if (mainResponse.ok) {
+        console.log('✅ Main data file saved successfully');
+      } else {
+        console.error('❌ Failed to save main data file:', mainResponse.status);
+      }
+
+      // Also save to public directory for consistency
+      console.log('💾 Saving to public data file...');
+      const publicResponse = await fetch('/api/save-prompts?public=true', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedPromptsData),
+      });
+
+      if (publicResponse.ok) {
+        console.log('✅ Public data file saved successfully');
+      } else {
+        console.error('❌ Failed to save public data file:', publicResponse.status);
+      }
     } catch (error) {
-      console.error('Error saving to file system:', error);
+      console.error('❌ Error saving to file system:', error);
     }
 
     // Show "Saved!" feedback
@@ -268,11 +362,11 @@ export default function InstructionsHub() {
             <div className="bg-white border border-gray-200 rounded-lg p-10 shadow-lg h-full">
               <h2 className="text-sm text-gray-900 mb-6">Cursor Prompts</h2>
               
-              {/* Grid of 5 boxes */}
+              {/* Grid of all boxes */}
               <div className="mb-8">
                 <div className="grid grid-cols-5 gap-4">
-                  {(promptsData.cursorPrompts || []).slice(0, 5).map((prompt) => (
-                    <div 
+                  {(promptsData.cursorPrompts || []).map((prompt) => (
+                    <div
                       key={prompt.id}
                       className="bg-gray-50 border border-gray-200 rounded-lg p-2.5 cursor-pointer hover:bg-gray-100 transition-colors"
                       onClick={() => openPrompt(prompt)}
@@ -286,11 +380,11 @@ export default function InstructionsHub() {
               {/* Cursor design prompts Section */}
               <h3 className="text-sm text-gray-900 mb-4">Cursor design prompts</h3>
               
-              {/* Grid of 5 boxes */}
+              {/* Grid of all boxes */}
               <div className="mb-8">
                 <div className="grid grid-cols-5 gap-4">
-                  {(promptsData.designPrompts || []).slice(0, 5).map((prompt) => (
-                    <div 
+                  {(promptsData.designPrompts || []).map((prompt) => (
+                    <div
                       key={prompt.id}
                       className="bg-gray-50 border border-gray-200 rounded-lg p-2.5 cursor-pointer hover:bg-gray-100 transition-colors"
                       onClick={() => openPrompt(prompt)}
@@ -304,11 +398,11 @@ export default function InstructionsHub() {
               {/* Rupert Prompts Section */}
               <h3 className="text-sm text-gray-900 mb-4 mt-8">Rupert Prompts</h3>
               
-              {/* Grid of 5 boxes */}
+              {/* Grid of all boxes */}
               <div className="mb-8">
                 <div className="grid grid-cols-5 gap-4">
-                  {(promptsData.rupertPrompts || []).slice(0, 5).map((prompt) => (
-                    <div 
+                  {(promptsData.rupertPrompts || []).map((prompt) => (
+                    <div
                       key={prompt.id}
                       className="bg-gray-50 border border-gray-200 rounded-lg p-2.5 cursor-pointer hover:bg-gray-100 transition-colors"
                       onClick={() => openPrompt(prompt)}
@@ -322,11 +416,11 @@ export default function InstructionsHub() {
               {/* Data Prompts Section */}
               <h3 className="text-sm text-gray-900 mb-4 mt-8">Data prompts</h3>
               
-              {/* Grid of 5 boxes */}
+              {/* Grid of all boxes */}
               <div className="mb-8">
                 <div className="grid grid-cols-5 gap-4">
-                  {(promptsData.dataPrompts || []).slice(0, 5).map((prompt) => (
-                    <div 
+                  {(promptsData.dataPrompts || []).map((prompt) => (
+                    <div
                       key={prompt.id}
                       className="bg-gray-50 border border-gray-200 rounded-lg p-2.5 cursor-pointer hover:bg-gray-100 transition-colors"
                       onClick={() => openPrompt(prompt)}

@@ -86,13 +86,13 @@
     },
     {
       "id": "rupert-3",
-      "title": "Rupert 3",
-      "content": "Enter your Rupert prompt content here..."
+      "title": "Model Topics & Questions",
+      "content": "Business Model (req)\n\nWhat do you sell and to whom? (req)\n\nHow do you charge (subscription, transactional, usage)? (req)\n\nPrimary acquisition channel(s)? (paid, outbound, partnerships, organic)\n\nGeography/segment focus?\n\n\nRevenue (req)\n\nPricing/ARPU or average order value? (req)\n\nVolume driver (leads→win‑rate; active subs; orders/mo)? (req)\n\nSales cycle length or churn (if subscription)? (req for subs)\n\nSeasonality or major ramps?\n\n\nCOGS / Direct Costs (req)\n\nWhat are your direct costs (materials, fulfillment, payment fees, contractor delivery)? (req)\n\nAre COGS a % of revenue or per‑unit? (req)\n\nCapacity constraints or step‑fixed elements?\n\n\nCustomer Acquisition (CAC & Funnel)\n\nMonthly paid spend and channels?\n\nCAC / target CAC? (req if paid acquisition)\n\nFunnel conversion rates (impr→click→lead→win) or trial→paid?\n\n\nOperating Expenses\n\nBiggest fixed OpEx buckets (rent, tools, G&A)? (req)\n\nVariable OpEx tied to revenue/users?\n\nPlanned step‑ups (launches, compliance, support)?\n\n\nTeam & Payroll (req)\n\nCurrent headcount by function + fully loaded monthly cost? (req)\n\nHiring plan next 12 months (role, start date, comp)? (req)\n\nContractors vs FTE mix?\n\nWorking Capital\n\nAR terms/DSO; AP/DPO; inventory turns (as relevant) (req when applicable)\n\nPrepayments or deposits?\n\nRefunds/chargebacks risk?\n\n\nCapEx & Debt\n\nUpcoming CapEx (what, when, $)? (req if any)\n\nExisting debt: balance, rate, amortization?\n\n\nGrowth Drivers & Risks\n\nTop 2–3 growth levers? (req)\n\nKey risks/constraints (supply, regulation, platform dependency)?\n\nReporting & KPIs\n\nEssential KPIs you track monthly?"
     },
     {
       "id": "rupert-4",
-      "title": "Rupert 4",
-      "content": "Enter your Rupert prompt content here..."
+      "title": "Advisors",
+      "content": "Rupert — Strategy Master\n   Think Gandalf, if Gandalf was a killer entrepreneur.\n\nJade — Modeling Ninja\n   Slices through spreadsheets like they’re sushi rolls.\n\nDante — Wall Street Insider\n   It’s like Jamie Dimon had a baby with Paddington Bear.\n\nNoah — Pitch Whisperer\n   Makes VCs cry, clap, and wire — sometimes all at once.\n\nLena — Growth Hacker\n   Breaks the internet before breakfast, fixes it by lunch.\n\nZane — Data Strategist\n   Knows your numbers better than you know your kids’ birthdays.\n\nKai — GTM Guru\n   Could launch a lemonade stand into a Fortune 500."
     },
     {
       "id": "rupert-5",
