@@ -32,7 +32,7 @@ export async function GET() {
     const jsonData = JSON.parse(fileContent);
     
     // Convert the JSON structure to match the database format
-    const prompts = [];
+    const prompts: any[] = [];
     
     // Process each category
     Object.entries(jsonData).forEach(([category, categoryPrompts]) => {
