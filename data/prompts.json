@@ -2,8 +2,8 @@
   "cursorPrompts": [
     {
       "id": "prompt-1",
-      "title": "Page 25/75",
-      "content": "Create a new page at app/portfolio/page.tsx that copies the exact layout and structure of the Share Price page, but remove all functionality from buttons and dropdowns. Keep only the visual design and layout.\n\nSpecific changes:\n- Page title: \"Portfolio Analysis\"\n- Left section title: \"Portfolio Inputs\"\n- Right section title: \"Analysis Results\" \n- Navigation buttons: \"Reset\" and \"Home\"\n- Remove all onClick handlers, API calls, and state management\n- Keep placeholder chart area and event boxes sections\n- Replace dropdown options with: [\"Tech Stocks\", \"Blue Chips\", \"Growth\"] for first dropdown, [\"6 Months\", \"1 Year\", \"2 Years\"] for second dropdown\n\nAdd navigation from the home page to this page, in an additional grid box."
+      "title": "Create New Page",
+      "content": "Content: Create a new page tsx that copies the exact layout and structure of the Data Mapper page, but remove all functionality from buttons and dropdowns.\nKeep only the visual design and layout.\n\nSpecific changes:\n- Page title: \"Helper\"\n- Left section title: \"Chat to Helper\"\n- Right section title: \"Results\" \n- Navigation buttons: \"Reset\" and \"Home\" on the Navigation Header\n- Remove all onClick handlers, API calls, and state management\n- Keep placeholder chart area and event boxes sections\n- Keep all the Admin section on the left side, with the functionalities (of Test API and the dropdown menus)\n\nNotes:\nThe Admin needs to be collapsible\nThe Test API button needs to work\n"
     },
     {
       "id": "prompt-2",
@@ -86,13 +86,13 @@
     },
     {
       "id": "rupert-3",
-      "title": "Model Topics & Questions",
-      "content": "Business Model (req)\n\nWhat do you sell and to whom? (req)\n\nHow do you charge (subscription, transactional, usage)? (req)\n\nPrimary acquisition channel(s)? (paid, outbound, partnerships, organic)\n\nGeography/segment focus?\n\n\nRevenue (req)\n\nPricing/ARPU or average order value? (req)\n\nVolume driver (leads→win‑rate; active subs; orders/mo)? (req)\n\nSales cycle length or churn (if subscription)? (req for subs)\n\nSeasonality or major ramps?\n\n\nCOGS / Direct Costs (req)\n\nWhat are your direct costs (materials, fulfillment, payment fees, contractor delivery)? (req)\n\nAre COGS a % of revenue or per‑unit? (req)\n\nCapacity constraints or step‑fixed elements?\n\n\nCustomer Acquisition (CAC & Funnel)\n\nMonthly paid spend and channels?\n\nCAC / target CAC? (req if paid acquisition)\n\nFunnel conversion rates (impr→click→lead→win) or trial→paid?\n\n\nOperating Expenses\n\nBiggest fixed OpEx buckets (rent, tools, G&A)? (req)\n\nVariable OpEx tied to revenue/users?\n\nPlanned step‑ups (launches, compliance, support)?\n\n\nTeam & Payroll (req)\n\nCurrent headcount by function + fully loaded monthly cost? (req)\n\nHiring plan next 12 months (role, start date, comp)? (req)\n\nContractors vs FTE mix?\n\nWorking Capital\n\nAR terms/DSO; AP/DPO; inventory turns (as relevant) (req when applicable)\n\nPrepayments or deposits?\n\nRefunds/chargebacks risk?\n\n\nCapEx & Debt\n\nUpcoming CapEx (what, when, $)? (req if any)\n\nExisting debt: balance, rate, amortization?\n\n\nGrowth Drivers & Risks\n\nTop 2–3 growth levers? (req)\n\nKey risks/constraints (supply, regulation, platform dependency)?\n\nReporting & KPIs\n\nEssential KPIs you track monthly?"
+      "title": "AI Advisors",
+      "content": "1. **Rupert — Business Advisor**\n   Guides overall business strategy, positioning, and growth.\n\n2. **Sofia — Financial Advisor**\n   Expert in financial modeling, fundraising, and capital planning.\n\n3. **Ethan — Presentation Advisor**\n   Crafts sharp investor decks and compelling pitch storytelling.\n\n4. **Maya — Sales Advisor**\n   Builds go-to-market playbooks and drives pipeline growth.\n\n5. **Daniel — Marketing Advisor**\n   Focuses on brand, demand generation, and digital strategy.\n\n6. **Aisha — Product Advisor**\n   Provides insight on product strategy, UX, and roadmap design.\n\n7. **Liam — Technology Advisor**\n   Guides architecture, scalability, and system implementation.\n\n8. **Clara — Operations Advisor**\n   Optimizes processes, supply chain, and organizational efficiency.\n\n9. **Marcus — Legal Advisor**\n   Ensures compliance, contracts, and IP protection.\n\n10. **Elena — HR & Talent Advisor**\n    Specializes in recruiting, culture, and performance management."
     },
     {
       "id": "rupert-4",
-      "title": "Advisors",
-      "content": "Rupert — Strategy Master\n   Think Gandalf, if Gandalf was a killer entrepreneur.\n\nJade — Modeling Ninja\n   Slices through spreadsheets like they’re sushi rolls.\n\nDante — Wall Street Insider\n   It’s like Jamie Dimon had a baby with Paddington Bear.\n\nNoah — Pitch Whisperer\n   Makes VCs cry, clap, and wire — sometimes all at once.\n\nLena — Growth Hacker\n   Breaks the internet before breakfast, fixes it by lunch.\n\nZane — Data Strategist\n   Knows your numbers better than you know your kids’ birthdays.\n\nKai — GTM Guru\n   Could launch a lemonade stand into a Fortune 500."
+      "title": "Rupert 4",
+      "content": "Enter your Rupert prompt content here..."
     },
     {
       "id": "rupert-5",

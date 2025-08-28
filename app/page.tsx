@@ -51,86 +51,118 @@ export default function Home() {
     return () => clearTimeout(timeout);
   }, [currentText, isDeleting, currentWord, words]);
 
-  // Parse Advisors from prompts data
-  const parseAdvisorsFromPrompts = async () => {
+  // Load advisors from AI Advisors prompt
+  const loadAdvisorsFromPrompt = async () => {
     const advisors: Advisor[] = [];
 
-    // Try to load from prompts.json first, fallback to hardcoded
-    let advisorsContent = '';
-
     try {
-      console.log('🔍 Attempting to load prompts.json dynamically...');
-      const response = await fetch('/data/prompts.json');
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      console.log('🔍 Loading advisors from AI Advisors prompt...');
+      
+      // First try localStorage, then fallback to JSON file
+      let promptsData = null;
+      const localData = localStorage.getItem('promptsData');
+      
+      if (localData) {
+        try {
+          promptsData = JSON.parse(localData);
+          console.log('📂 Using localStorage data');
+        } catch (error) {
+          console.log('❌ Error parsing localStorage data:', error);
+        }
       }
-      const promptsData = await response.json();
-      console.log('📂 prompts.json loaded successfully:', promptsData.length, 'entries');
+      
+      if (!promptsData) {
+        // Fallback to JSON file
+        console.log('📂 Falling back to JSON file');
+        const response = await fetch('/data/prompts.json');
+        if (response.ok) {
+          promptsData = await response.json();
+        }
+      }
 
-      const advisorsPrompt = promptsData.find((prompt: any) => prompt.title === 'Advisors');
-      console.log('🎯 Advisors prompt found:', advisorsPrompt ? 'YES' : 'NO');
-
-      if (advisorsPrompt) {
-        advisorsContent = advisorsPrompt.content;
-        console.log('📝 Loaded advisors from prompts.json');
-        console.log('📋 Content preview:', advisorsContent.substring(0, 50) + '...');
-      } else {
-        console.log('⚠️ Advisors prompt not found in prompts.json');
+      if (promptsData && promptsData.rupertPrompts) {
+        console.log('📂 Found rupertPrompts, count:', promptsData.rupertPrompts.length);
+        console.log('📂 Rupert prompts IDs:', promptsData.rupertPrompts.map((p: any) => p.id));
+        
+        // Find the AI Advisors prompt (rupert-3)
+        const aiAdvisorsPrompt = promptsData.rupertPrompts.find((p: any) => p.id === 'rupert-3');
+        console.log('🔍 AI Advisors prompt found:', !!aiAdvisorsPrompt);
+        
+        if (aiAdvisorsPrompt && aiAdvisorsPrompt.content) {
+          console.log('📂 AI Advisors prompt found, parsing content...');
+          console.log('🔍 AI Advisors prompt content:', aiAdvisorsPrompt.content);
+          
+          // Parse the AI Advisors content
+          const lines = aiAdvisorsPrompt.content.split('\n');
+          let currentAdvisor = null;
+          
+          for (const line of lines) {
+            const trimmedLine = line.trim();
+            console.log('📝 Processing line:', trimmedLine);
+            
+            // Look for lines that start with a number and ** (advisor entries)
+            const advisorMatch = trimmedLine.match(/^\d+\.\s\*\*(.+?)\*\*/);
+            console.log('🔍 Regex match result:', advisorMatch);
+            
+            // Also try a simpler pattern for debugging
+            if (trimmedLine.match(/^\d+\./)) {
+              console.log('🔍 Found numbered line:', trimmedLine);
+            }
+            if (advisorMatch) {
+                           const nameRole = advisorMatch[1];
+             console.log('🔍 Raw nameRole:', nameRole);
+             // Split by pipe first, then by em dash, then by regular dash
+             const name = nameRole.split('|')[0] || nameRole.split(' — ')[0] || nameRole.split(' - ')[0] || nameRole;
+             const role = nameRole.split('|')[1] || nameRole.split(' — ')[1] || nameRole.split(' - ')[1] || 'Advisor';
+             console.log('🔍 Parsed name:', name, 'role:', role);
+             // Clean the name to just get the first name for the image
+             const cleanName = name.trim().split(' ')[0]; // Take only the first word
+             const imageName = cleanName.toLowerCase();
+              
+              console.log('✅ Found advisor:', name, role);
+              
+              currentAdvisor = {
+                name,
+                role,
+                description: '',
+                imageName
+              };
+            } else if (currentAdvisor && trimmedLine.startsWith('   ') && trimmedLine.length > 3) {
+              // This is the one-liner (indented line)
+              currentAdvisor.description = trimmedLine.trim();
+              console.log('📝 Adding advisor to array:', currentAdvisor.name);
+              advisors.push(currentAdvisor);
+              currentAdvisor = null;
+            } else if (currentAdvisor && trimmedLine.includes('One-liner:')) {
+              // Alternative one-liner format
+              const oneLinerMatch = trimmedLine.match(/One-liner:\s*["']?([^"']+)["']?/);
+              if (oneLinerMatch) {
+                currentAdvisor.description = oneLinerMatch[1];
+                console.log('📝 Adding advisor to array (alt format):', currentAdvisor.name);
+                advisors.push(currentAdvisor);
+                currentAdvisor = null;
+              }
+            }
+          }
+          
+          // If we found any advisors, return them (don't use fallback)
+          if (advisors.length > 0) {
+            console.log('✅ Found advisors in AI Advisors prompt:', advisors.length);
+            console.log('📋 Final advisor order:', advisors.map(a => a.name).join(' → '));
+            return advisors;
+          }
+          
+          console.log('✅ Parsed advisors from AI Advisors prompt:', advisors.length);
+        }
       }
     } catch (error) {
-      console.log('❌ Error loading prompts.json:', error instanceof Error ? error.message : String(error));
+      console.log('❌ Error loading from AI Advisors prompt:', error instanceof Error ? error.message : String(error));
       console.log('📝 Using fallback advisor data');
     }
 
-    // Fallback content if prompts.json not available
-    if (!advisorsContent) {
-      advisorsContent = "Rupert — Strategy Master\n   Think Gandalf, if Gandalf was a killer entrepreneur.\n\nJade — Modeling Ninja\n   Slices through spreadsheets like they're sushi rolls.\n\nDante — Wall Street Insider\n   It's like Jamie Dimon had a baby with Paddington Bear.\n\nNoah — Pitch Whisperer\n   Makes VCs cry, clap, and wire — sometimes all at once.\n\nZane — Data Strategist\n   Knows your numbers better than you know your kids' birthdays.\n\nKai — GTM Guru\n   Could launch a lemonade stand into a Fortune 500.\n\nLena — Growth Hacker\n   Breaks the internet before breakfast, fixes it by lunch.";
-    }
-
-    // Parse the content
-    const lines = advisorsContent.split('\n');
-    console.log('📝 Parsing advisors from content...');
-    console.log('📄 Raw content:', advisorsContent);
-
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i].trim();
-      console.log(`📍 Line ${i}: "${lines[i]}" (trimmed: "${line}")`);
-
-      if (!line) continue;
-
-      // Only match advisor entries that start with a name (not indented descriptions)
-      // and ensure the line starts at the beginning (no leading spaces)
-      const match = line.match(/^([A-Za-z]+)\s*—\s*(.+)$/);
-      console.log(`🔍 Match result for line ${i}:`, match);
-
-      if (match && !lines[i].match(/^\s/)) { // Ensure it doesn't start with spaces
-        const name = match[1].trim();
-        const role = match[2].trim();
-        console.log(`✅ Found advisor: ${name} -> ${role}`);
-
-        // Get the next non-empty line as description
-        let description = '';
-        for (let j = i + 1; j < lines.length; j++) {
-          const originalLine = lines[j];
-          const descLine = originalLine.trim();
-          if (descLine && originalLine.match(/^\s/) && !descLine.includes('—')) {
-            description = descLine;
-            break;
-          } else if (descLine && !originalLine.match(/^\s/)) {
-            // Stop if we hit another advisor entry (line that doesn't start with spaces)
-            break;
-          }
-        }
-
-        const imageName = name.toLowerCase().replace(/\s+/g, '');
-        console.log(`👤 Advisor ${advisors.length + 1}: ${name} -> ${role}`);
-        advisors.push({
-          name,
-          role,
-          description,
-          imageName
-        });
-      }
+    // Only show advisors from AI Advisors prompt - no fallback
+    if (advisors.length === 0) {
+      console.log('📝 No advisors found in AI Advisors prompt');
     }
 
     console.log('📋 Final advisor order:', advisors.map(a => a.name).join(' → '));
@@ -141,7 +173,7 @@ export default function Home() {
   useEffect(() => {
     const loadAdvisors = async () => {
       try {
-        const advisors = await parseAdvisorsFromPrompts();
+        const advisors = await loadAdvisorsFromPrompt();
         setAdvisors(advisors);
         console.log('✅ Advisors loaded successfully:', advisors.length, 'advisors');
       } catch (error) {
@@ -166,8 +198,9 @@ export default function Home() {
 
   // Check if advisor image exists
   const checkImageExists = (imageName: string) => {
-    // Assume images exist for all parsed advisors
-    return true;
+    // Only check for the 4 advisors we have: rupert, jade, dante, kai
+    const availableImages = ['rupert', 'jade', 'dante', 'kai'];
+    return availableImages.includes(imageName);
   };
 
   // Generate tool cards for each advisor
@@ -308,26 +341,7 @@ export default function Home() {
         <div className="page-wrap flex justify-between items-center">
           <div className="text-3xl leading-none">Hey Rupert!</div>
           <nav className="hidden md:flex space-x-4">
-            {/* Refresh advisors button */}
-            <button
-              onClick={async () => {
-                console.log('🔄 Refreshing advisors...');
-                try {
-                  const newAdvisors = await parseAdvisorsFromPrompts();
-                  setAdvisors(newAdvisors);
-                  console.log('✅ Advisors refreshed:', newAdvisors.length, 'advisors');
-                } catch (error) {
-                  console.error('❌ Failed to refresh advisors:', error instanceof Error ? error.message : String(error));
-                }
-              }}
-              className="flex items-center space-x-2 px-3 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              title="Refresh advisors from prompts.json"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
-              <span>Refresh Advisors</span>
-            </button>
+            {/* Navigation items can be added here in the future */}
           </nav>
         </div>
       </header>
@@ -364,12 +378,14 @@ export default function Home() {
                       <div className="absolute inset-0">
                         {checkImageExists(advisors[currentAdvisorIndex].imageName) ? (
                           <>
-                            <Image
-                              src={`/images/advisors/${advisors[currentAdvisorIndex].imageName}.jpg`}
-                              alt={advisors[currentAdvisorIndex].name}
-                              fill
-                              className="object-cover"
-                            />
+                                                      <Image
+                            src={`/images/advisors/${advisors[currentAdvisorIndex].imageName}.jpg`}
+                            alt={advisors[currentAdvisorIndex].name}
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 30vw, 30vw"
+                            priority={currentAdvisorIndex === 0}
+                            className="object-cover"
+                          />
                             {/* Dark overlay for text readability */}
                             <div className="absolute inset-0 bg-black bg-opacity-40"></div>
                           </>
@@ -439,7 +455,7 @@ export default function Home() {
           return (
             <section key={advisor.name} className="mt-8 md:mt-10 lg:mt-12">
               <div className="w-full">
-                <h2 className="text-[1.25rem] md:text-[1.5rem] font-normal mb-6">{advisor.name} - your {advisor.role.toLowerCase()}</h2>
+                <h2 className="text-[1.25rem] md:text-[1.5rem] font-normal mb-6">{advisor.name} | {advisor.role}</h2>
                 <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
                   {/* Advisor Image Card - First Position */}
                   <div
@@ -455,6 +471,7 @@ export default function Home() {
                             alt={advisor.name}
                             width={400}
                             height={300}
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 20vw, 20vw"
                             className="w-full h-full object-cover"
                           />
                           {/* Dark overlay for text readability */}
