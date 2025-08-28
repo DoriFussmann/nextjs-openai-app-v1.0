@@ -32,7 +32,7 @@ export async function GET(req: NextRequest, { params }: { params: { key: string 
     const jsonData = JSON.parse(fileContent);
     
     // Search for the prompt by key across all categories
-    let foundPrompt = null;
+    let foundPrompt: any = null;
     
     Object.entries(jsonData).forEach(([category, categoryPrompts]) => {
       if (Array.isArray(categoryPrompts)) {
