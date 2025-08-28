@@ -80,79 +80,82 @@ export default function Home() {
         }
       }
 
-      if (promptsData && promptsData.rupertPrompts) {
-        console.log('📂 Found rupertPrompts, count:', promptsData.rupertPrompts.length);
-        console.log('📂 Rupert prompts IDs:', promptsData.rupertPrompts.map((p: any) => p.id));
+      console.log('🔍 Available keys in promptsData:', Object.keys(promptsData));
+      console.log('🔍 Full promptsData structure:', promptsData);
+      // Look for AI Advisors in the Prompts Hub
+      if (promptsData && promptsData.aiAdvisors) {
+        console.log('📂 Found AI Advisors, count:', promptsData.aiAdvisors.length);
+        console.log('📂 AI Advisors:', promptsData.aiAdvisors.map((p: any) => p.title));
         
-        // Find the AI Advisors prompt (rupert-3)
-        const aiAdvisorsPrompt = promptsData.rupertPrompts.find((p: any) => p.id === 'rupert-3');
-        console.log('🔍 AI Advisors prompt found:', !!aiAdvisorsPrompt);
+        // Use the AI Advisors from the Prompts Hub
+        promptsData.aiAdvisors.forEach((advisor: any) => {
+          if (advisor.title && advisor.content) {
+            // Parse the title to get name and role
+            const nameRole = advisor.title;
+            const name = nameRole.split('|')[0] || nameRole.split(' — ')[0] || nameRole.split(' - ')[0] || nameRole;
+            const role = nameRole.split('|')[1] || nameRole.split(' — ')[1] || nameRole.split(' - ')[1] || 'Advisor';
+            
+            // Clean the name to just get the first name for the image
+            const cleanName = name.trim().split(' ')[0];
+            const imageName = cleanName.toLowerCase();
+            
+            console.log('✅ Found advisor from Prompts Hub:', name, role);
+            
+            advisors.push({
+              name: name.trim(),
+              role: role.trim(),
+              description: advisor.content.trim(),
+              imageName
+            });
+          }
+        });
         
-        if (aiAdvisorsPrompt && aiAdvisorsPrompt.content) {
-          console.log('📂 AI Advisors prompt found, parsing content...');
-          console.log('🔍 AI Advisors prompt content:', aiAdvisorsPrompt.content);
-          
-          // Parse the AI Advisors content
-          const lines = aiAdvisorsPrompt.content.split('\n');
-          let currentAdvisor = null;
-          
-          for (const line of lines) {
-            const trimmedLine = line.trim();
-            console.log('📝 Processing line:', trimmedLine);
+        if (advisors.length > 0) {
+          console.log('✅ Found advisors in Prompts Hub:', advisors.length);
+          console.log('📋 Final advisor order:', advisors.map(a => a.name).join(' → '));
+          return advisors;
+        }
+      }
+      
+      // If no aiAdvisors found, check if we need to initialize them
+      console.log('❌ No aiAdvisors found in promptsData. Checking if we need to initialize...');
+      
+      // Check if there are any AI Advisors in localStorage that we can use
+      const localDataCheck = localStorage.getItem('promptsData');
+      if (localDataCheck) {
+        try {
+          const localPromptsData = JSON.parse(localDataCheck);
+          if (localPromptsData.aiAdvisors && localPromptsData.aiAdvisors.length > 0) {
+            console.log('📂 Found AI Advisors in localStorage:', localPromptsData.aiAdvisors.length);
             
-            // Look for lines that start with a number and ** (advisor entries)
-            const advisorMatch = trimmedLine.match(/^\d+\.\s\*\*(.+?)\*\*/);
-            console.log('🔍 Regex match result:', advisorMatch);
-            
-            // Also try a simpler pattern for debugging
-            if (trimmedLine.match(/^\d+\./)) {
-              console.log('🔍 Found numbered line:', trimmedLine);
-            }
-            if (advisorMatch) {
-                           const nameRole = advisorMatch[1];
-             console.log('🔍 Raw nameRole:', nameRole);
-             // Split by pipe first, then by em dash, then by regular dash
-             const name = nameRole.split('|')[0] || nameRole.split(' — ')[0] || nameRole.split(' - ')[0] || nameRole;
-             const role = nameRole.split('|')[1] || nameRole.split(' — ')[1] || nameRole.split(' - ')[1] || 'Advisor';
-             console.log('🔍 Parsed name:', name, 'role:', role);
-             // Clean the name to just get the first name for the image
-             const cleanName = name.trim().split(' ')[0]; // Take only the first word
-             const imageName = cleanName.toLowerCase();
-              
-              console.log('✅ Found advisor:', name, role);
-              
-              currentAdvisor = {
-                name,
-                role,
-                description: '',
-                imageName
-              };
-            } else if (currentAdvisor && trimmedLine.startsWith('   ') && trimmedLine.length > 3) {
-              // This is the one-liner (indented line)
-              currentAdvisor.description = trimmedLine.trim();
-              console.log('📝 Adding advisor to array:', currentAdvisor.name);
-              advisors.push(currentAdvisor);
-              currentAdvisor = null;
-            } else if (currentAdvisor && trimmedLine.includes('One-liner:')) {
-              // Alternative one-liner format
-              const oneLinerMatch = trimmedLine.match(/One-liner:\s*["']?([^"']+)["']?/);
-              if (oneLinerMatch) {
-                currentAdvisor.description = oneLinerMatch[1];
-                console.log('📝 Adding advisor to array (alt format):', currentAdvisor.name);
-                advisors.push(currentAdvisor);
-                currentAdvisor = null;
+            localPromptsData.aiAdvisors.forEach((advisor: any) => {
+              if (advisor.title && advisor.content) {
+                const nameRole = advisor.title;
+                const name = nameRole.split('|')[0] || nameRole.split(' — ')[0] || nameRole.split(' - ')[0] || nameRole;
+                const role = nameRole.split('|')[1] || nameRole.split(' — ')[1] || nameRole.split(' - ')[1] || 'Advisor';
+                
+                const cleanName = name.trim().split(' ')[0];
+                const imageName = cleanName.toLowerCase();
+                
+                console.log('✅ Found advisor from localStorage:', name, role);
+                
+                advisors.push({
+                  name: name.trim(),
+                  role: role.trim(),
+                  description: advisor.content.trim(),
+                  imageName
+                });
               }
+            });
+            
+            if (advisors.length > 0) {
+              console.log('✅ Found advisors in localStorage:', advisors.length);
+              console.log('📋 Final advisor order:', advisors.map(a => a.name).join(' → '));
+              return advisors;
             }
           }
-          
-          // If we found any advisors, return them (don't use fallback)
-          if (advisors.length > 0) {
-            console.log('✅ Found advisors in AI Advisors prompt:', advisors.length);
-            console.log('📋 Final advisor order:', advisors.map(a => a.name).join(' → '));
-            return advisors;
-          }
-          
-          console.log('✅ Parsed advisors from AI Advisors prompt:', advisors.length);
+        } catch (error) {
+          console.log('❌ Error parsing localStorage data:', error);
         }
       }
     } catch (error) {
